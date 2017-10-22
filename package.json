@@ -1,0 +1,39 @@
+{
+  "name": "meeteux-table",
+  "version": "1.0.0",
+  "description": "MEETeUX",
+  "main": "dir/index",
+  "types": "dir/index",
+  "scripts": {
+    "tsc": "tsc",
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fhstp/meeteux-table.git"
+  },
+  "keywords": [],
+  "author": "Niklas Thür",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fhstp/meeteux-table/issues"
+  },
+  "homepage": "https://github.com/fhstp/meeteux-table#readme",
+  "devDependencies": {
+    "@types/node": "^8.0.46",
+    "nodemon": "^1.12.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3",
+    "typescript-eslint-parser": "^6.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.15.4",
+    "mysql2": "^1.4.2",
+    "sequelize": "^4.7.3",
+    "socket.io": "^2.0.3",
+    "socket.io-client": "^2.0.3",
+    "sqlite3": "^3.1.13"
+  }
+}

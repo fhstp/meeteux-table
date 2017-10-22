@@ -1,0 +1,3 @@
+#Rename File in .env
+NODE_PATH = C:/Niklas/Code/meeteux-table
+SERVER_PORT = 3000
