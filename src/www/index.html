@@ -1,18 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<h1>Tach</h1>
-
+<h1>Connected on Table</h1>
+<h2 id="User1"></h2>
+<h2 id="User2"></h2>
+<h2 id="User3"></h2>
+<h2 id="User4"></h2>
+<button id="requestUser">requestUser</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
     var socket = io.connect('http://localhost:3000');
     socket.on('connected', function (data) {
-        console.log(data);
+            //console.log(data);
+        });
+
+        var txtUser1 = $("#User1");
+        var txtUser2 = $("#User2");
+        var txtUser3 = $("#User3");
+        var txtUser4 = $("#User4");
+
+    socket.on('requestDataResult', function(data){
+        for(var i = 0; i<data.users.length;i++){
+            console.log(data.users[i].name);
+            if(i==0){txtUser1.text(data.users[i].name);}
+            if(i==1){txtUser2.text(data.users[i].name);}
+            if(i==2){txtUser3.text(data.users[i].name);}
+            if(i==3){txtUser4.text(data.users[i].name);}
+        }
+    });
+
+    var requestUserButton = $("#requestUser");
+
+    function triggerRequestData(){
+        socket.emit('requestData')
+    }
+
+    requestUserButton.click(function() {
+        triggerRequestData();
     });
 </script>
 </body>

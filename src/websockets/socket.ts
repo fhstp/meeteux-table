@@ -36,6 +36,14 @@ export class WebSocket
                     socket.emit('connectODResult', values);
                 });
             });
+
+            socket.on('requestData', () =>
+            {
+                this.odController.requestData().then( (values) =>
+                {
+                    socket.emit('requestDataResult', values);
+                });
+            });
         });
     }
 
@@ -43,6 +51,10 @@ export class WebSocket
     {
         this.godSocket.on('news', (message) => {
             console.log(message);
+        });
+
+        this.godSocket.on('loginExhibitResult', (result) => {
+            console.log(result);
         });
     }
 
@@ -65,6 +77,6 @@ export class WebSocket
           });
 
           console.log('IP-Adresse: ' + address);
-        //this.godSocket.emit('loginExhibit', address);
+        this.godSocket.emit('loginExhibit', address);
     }
 }
