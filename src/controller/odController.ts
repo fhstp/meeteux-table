@@ -25,4 +25,13 @@ export class OdController
             return "FAILED";
         });
     }
+
+    public requestData(): any
+    {
+        return this.database.user.findAll().then((users) =>{
+            return {users};
+        }).catch((err) => {
+            return "Failed";
+        });
+    }
 }
