@@ -17,7 +17,26 @@ export class Connection
         this.initDatabaseTables();
         this.initDatabaseRelations();
 
-        this._sequelize.sync();
+        //this._sequelize.sync();
+
+        this._sequelize.sync({force: true}).then(() => {
+            this._user.create({
+                id: 1,
+                name: 'Schlese'
+            });
+            this._user.create({
+                id: 2,
+                name: 'Rowsdower'
+            });
+            this._user.create({
+                id: 3,
+                name: 'Cookie Monster'
+            });
+            this._user.create({
+                id: 4,
+                name: 'Darth Vader'
+            });
+        });
     }
 
     public static getInstance(): Connection

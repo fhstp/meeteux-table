@@ -36,6 +36,14 @@ export class WebSocket
                     socket.emit('connectODResult', values);
                 });
             });
+
+            socket.on('requestData', () =>
+            {
+                this.odController.requestData().then( (values) =>
+                {
+                    socket.emit('requestDataResult', values);
+                });
+            });
         });
     }
 
