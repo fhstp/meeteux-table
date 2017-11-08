@@ -44,6 +44,10 @@ export class WebSocket
         this.godSocket.on('news', (message) => {
             console.log(message);
         });
+
+        this.godSocket.on('loginExhibitResult', (result) => {
+            console.log(result);
+        });
     }
 
     public loginExhibit()
@@ -65,6 +69,6 @@ export class WebSocket
           });
 
           console.log('IP-Adresse: ' + address);
-        //this.godSocket.emit('loginExhibit', address);
+        this.godSocket.emit('loginExhibit', address);
     }
 }
