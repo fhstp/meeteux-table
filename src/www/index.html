@@ -27,7 +27,13 @@
         var txtUser4 = $("#User4");
 
     socket.on('requestDataResult', function(data){
-        console.log(data);
+        
+        txtUser1.text('');
+        txtUser2.text('');
+        txtUser3.text('');
+        txtUser4.text('');
+        
+        
         for(var i = 0; i<data.users.length;i++){
             console.log(data.users[i].name);
             if(i==0){txtUser1.text(data.users[i].name);}

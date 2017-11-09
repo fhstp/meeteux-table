@@ -51,6 +51,19 @@ export class WebSocket
                     socket.emit('requestDataResult', values);
                 });
             });
+
+            socket.on('closeConnection', (user) =>
+            {
+                this.odController.removeUser(user).then( (result) =>
+                {
+                    socket.emit('closeConnectionResult', result);
+
+                    this.odController.requestData().then( (values) =>
+                    {
+                        socket.broadcast.emit('requestDataResult', values);
+                    });
+                });
+            });
         });
     }
 

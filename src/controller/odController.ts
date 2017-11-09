@@ -35,4 +35,13 @@ export class OdController
             return "Failed";
         });
     }
+
+    public removeUser(user): any
+    {
+        return this.database.user.destroy({where: {id: user.id}}).then(() =>{
+            return "SUCCESS";
+        }).catch((err) => {
+            return "Failed";
+        });
+    }
 }
