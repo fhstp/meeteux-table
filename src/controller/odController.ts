@@ -12,16 +12,17 @@ export class OdController
 
     public connectOD(data: any): any
     {
-        const identifier: string = data.identifier;
-        const name: string = data.name;
+        const tmp = JSON.parse(data);
+        const identifier = tmp.id;
+        const username = tmp.name;
 
         return this.database.user.create({
             id: identifier,
-            name: name,
+            name: username,
         }).then( (user) => {
             return "Connected to Table"
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
             return "FAILED";
         });
     }

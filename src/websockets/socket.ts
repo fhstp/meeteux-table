@@ -1,6 +1,6 @@
 import * as IO from 'socket.io';
 import * as IOClient from 'socket.io-client';
-import  { Connection } from '../database';
+import  { Connection, Store } from '../database';
 import { OdController } from "../controller";
 import * as os from 'os';
 
@@ -10,13 +10,15 @@ export class WebSocket
     private godSocket: any;
     private database: any;
     private odController: OdController;
+    private store: Store;
 
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('http://god.meeteux.fhstp.ac.at');
+        this.godSocket = IOClient.connect('http://localhost:8080');
         this.odController = new OdController();
         this.database = Connection.getInstance();
+        this.store = Store.getInstance();
 
         this.attachODListeners();
         this.attachGodListeners();
@@ -34,6 +36,11 @@ export class WebSocket
                 this.odController.connectOD(data).then( (values) =>
                 {
                     socket.emit('connectODResult', values);
+                });
+
+                this.odController.requestData().then( (values) =>
+                {
+                    socket.broadcast.emit('requestDataResult', values);
                 });
             });
 
@@ -54,7 +61,7 @@ export class WebSocket
         });
 
         this.godSocket.on('loginExhibitResult', (result) => {
-            console.log(result);
+            this.store.location = result;
         });
     }
 
@@ -76,7 +83,7 @@ export class WebSocket
             });
           });
 
-          console.log('IP-Adresse: ' + address);
+        console.log('IP-Adresse: ' + address);
         this.godSocket.emit('loginExhibit', address);
     }
 }

@@ -15,10 +15,11 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://localhost:3000');
-    socket.on('connected', function (data) {
-            //console.log(data);
-        });
+    var socket = io.connect('http://localhost:8100');
+    socket.on('connected', function (data) 
+    {
+            console.log(data);
+    });
 
         var txtUser1 = $("#User1");
         var txtUser2 = $("#User2");
@@ -26,6 +27,7 @@
         var txtUser4 = $("#User4");
 
     socket.on('requestDataResult', function(data){
+        console.log(data);
         for(var i = 0; i<data.users.length;i++){
             console.log(data.users[i].name);
             if(i==0){txtUser1.text(data.users[i].name);}
