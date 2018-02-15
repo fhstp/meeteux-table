@@ -63,6 +63,14 @@ export class Connection
             name: {
                 type: Sequelize.STRING,
                 allowNull: false
+            },
+            location: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            statusTime: {
+                type: Sequelize.DATE,
+                alllowNull: true
             }
         });
 
@@ -104,5 +112,9 @@ export class Connection
 
     get user(): any {
         return this._user;
+    }
+
+    get sequelize(): any {
+        return this._sequelize;
     }
 }
