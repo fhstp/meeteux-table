@@ -35,11 +35,10 @@
         
         
         for(var i = 0; i<data.users.length;i++){
-            console.log(data.users[i].name);
-            if(i==0){txtUser1.text(data.users[i].name);}
-            if(i==1){txtUser2.text(data.users[i].name);}
-            if(i==2){txtUser3.text(data.users[i].name);}
-            if(i==3){txtUser4.text(data.users[i].name);}
+            if(i==0){txtUser1.text(data.users[i].name + ' - ' + data.users[i].location);}
+            if(i==1){txtUser2.text(data.users[i].name + ' - ' + data.users[i].location);}
+            if(i==2){txtUser3.text(data.users[i].name + ' - ' + data.users[i].location);}
+            if(i==3){txtUser4.text(data.users[i].name + ' - ' + data.users[i].location);}
         }
     });
 

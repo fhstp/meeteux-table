@@ -12,13 +12,14 @@ export class OdController
 
     public connectOD(data: any): any
     {
-        const tmp = JSON.parse(data);
-        const identifier = tmp.id;
-        const username = tmp.name;
+        const identifier = data.user.id;
+        const username = data.user.name;
+        const locationName = data.location.description;
 
         return this.database.user.create({
             id: identifier,
             name: username,
+            location: locationName
         }).then( (user) => {
             return "Connected to Table"
         }).catch((err) => {
@@ -43,5 +44,17 @@ export class OdController
         }).catch((err) => {
             return "Failed";
         });
+    }
+
+    public findNotRespondingUser(): any
+    {
+        return this.database.user.find({where: {statusTime: { gt: this.database.sequelize.literal("NOW() - INTERVAL 10 MINUTE") }}})
+            .then( users => { return users; });
+    }
+
+
+    public updateUserStatus(user): void
+    {
+        this.database.user.update({statusTime: Date.now()},{where: {id: user.id}});
     }
 }

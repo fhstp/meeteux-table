@@ -15,20 +15,20 @@ export class WebSocket
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('http://localhost:8080');
+        this.godSocket = IOClient.connect('http://god.meeteux.fhstp.ac.at:3000');
         this.odController = new OdController();
         this.database = Connection.getInstance();
         this.store = Store.getInstance();
 
         this.attachODListeners();
         this.attachGodListeners();
+        this.startUserStatusIntervall();
     }
 
     private attachODListeners(): void
     {
         this.odSocket.on('connection', (socket) =>
         {
-            this.loginExhibit();
             socket.emit('connected', 'Client Table connected to Server!');
 
             socket.on('connectOD', (data) =>
@@ -71,6 +71,7 @@ export class WebSocket
     {
         this.godSocket.on('news', (message) => {
             console.log(message);
+            this.loginExhibit();
         });
 
         this.godSocket.on('loginExhibitResult', (result) => {
@@ -98,5 +99,28 @@ export class WebSocket
 
         console.log('IP-Adresse: ' + address);
         this.godSocket.emit('loginExhibit', address);
+    }
+
+    private startUserStatusIntervall(): void
+    {
+        setInterval(() => {
+            this.odController.findNotRespondingUser().then( (users) =>
+            {
+                this.godSocket.emit('disconnectNotRespondingUsers', users);
+                for( let user of users)
+                {
+                    this.odController.removeUser(user);
+                }
+                this.odController.requestData().then( (values) =>
+                {
+                    this.odSocket.broadcast.emit('requestDataResult', values);
+                });
+            });
+            this.odSocket.socket.broadcast.emit('exhibitStatusCheck');
+        }, 1000 * 60 * 2);
+
+        this.odSocket.on('checkUserStatusResult', (user) => {
+            this.odController.updateUserStatus(user);
+        });
     }
 }
