@@ -11,24 +11,25 @@ export class WebSocket
     private database: any;
     private odController: OdController;
     private store: Store;
+    private EXPIRATION_TIME = 1000 * 60 * 2;
 
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('http://god.meeteux.fhstp.ac.at:3000');
+        this.godSocket = IOClient.connect('https://localhost:3000/');
         this.odController = new OdController();
         this.database = Connection.getInstance();
         this.store = Store.getInstance();
 
         this.attachODListeners();
         this.attachGodListeners();
-        this.startUserStatusIntervall();
     }
 
     private attachODListeners(): void
     {
         this.odSocket.on('connection', (socket) =>
         {
+            this.startUserStatusIntervall(socket);
             socket.emit('connected', 'Client Table connected to Server!');
 
             socket.on('connectOD', (data) =>
@@ -75,7 +76,7 @@ export class WebSocket
         });
 
         this.godSocket.on('loginExhibitResult', (result) => {
-            this.store.location = result;
+            this.store.location = result.data;
         });
     }
 
@@ -101,25 +102,39 @@ export class WebSocket
         this.godSocket.emit('loginExhibit', address);
     }
 
-    private startUserStatusIntervall(): void
+    private startUserStatusIntervall(socket: any): void
     {
         setInterval(() => {
-            this.odController.findNotRespondingUser().then( (users) =>
+            this.odController.findAllUsers().then( (users) =>
             {
-                this.godSocket.emit('disconnectNotRespondingUsers', users);
-                for( let user of users)
+                if(users !== null)
                 {
-                    this.odController.removeUser(user);
+                    let deleteUsers = [];
+                    for (let user of users)
+                    {
+                        if(((Date.now()) - user.statusTime) > this.EXPIRATION_TIME)
+                        {
+                            // console.log((Date.now()) - user.statusTime + " ______ "+ this.EXPIRATION_TIME);
+                            this.odController.removeUser(user);
+                            deleteUsers.push(user);
+                        }
+                    }
+
+                    if(deleteUsers.length > 0)
+                    {
+                        this.godSocket.emit('disconnectNotRespondingUsers', deleteUsers);
+                    }
                 }
+
                 this.odController.requestData().then( (values) =>
                 {
-                    this.odSocket.broadcast.emit('requestDataResult', values);
+                    socket.broadcast.emit('requestDataResult', values);
                 });
             });
-            this.odSocket.socket.broadcast.emit('exhibitStatusCheck');
-        }, 1000 * 60 * 2);
+            socket.broadcast.emit('exhibitStatusCheck');
+        }, 1000 * 30);
 
-        this.odSocket.on('exhibitStatusCheckResult', (user) => {
+        socket.on('exhibitStatusCheckResult', (user) => {
             this.odController.updateUserStatus(user);
         });
     }

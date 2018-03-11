@@ -19,7 +19,8 @@ export class OdController
         return this.database.user.create({
             id: identifier,
             name: username,
-            location: locationName
+            location: locationName,
+            statusTime: Date.now()
         }).then( (user) => {
             return "Connected to Table"
         }).catch((err) => {
@@ -46,10 +47,13 @@ export class OdController
         });
     }
 
-    public findNotRespondingUser(): any
+    public findAllUsers(): any
     {
-        return this.database.user.find({where: {statusTime: { gt: this.database.sequelize.literal("NOW() - INTERVAL 10 MINUTE") }}})
-            .then( users => { return users; });
+        return this.database.user.findAll().then((users) =>{
+            return users;
+        }).catch((err) => {
+            return "Failed";
+        });
     }
 
 

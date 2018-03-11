@@ -13,7 +13,7 @@ export class Connection
         this._sequelize = new Sequelize('null', 'null', 'null', {
             dialect: 'sqlite',
             storage: 'database.sqlite',
-            logging: false
+            logging: true
         });
         this.initDatabaseTables();
         this.initDatabaseRelations();
