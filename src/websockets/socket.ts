@@ -11,12 +11,12 @@ export class WebSocket
     private database: any;
     private odController: OdController;
     private store: Store;
-    private EXPIRATION_TIME = 1000 * 60 * 2;
+    private EXPIRATION_TIME = 1000 * 60;
 
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('https://localhost:3000/');
+        this.godSocket = IOClient.connect('https://localhost:3000', { secure: true, reconnect: true, rejectUnauthorized : false });
         this.odController = new OdController();
         this.database = Connection.getInstance();
         this.store = Store.getInstance();
@@ -29,8 +29,11 @@ export class WebSocket
     {
         this.odSocket.on('connection', (socket) =>
         {
-            this.startUserStatusIntervall(socket);
             socket.emit('connected', 'Client Table connected to Server!');
+
+            socket.on('connectClient', () => {
+                this.startUserStatusIntervall(socket);
+            });
 
             socket.on('connectOD', (data) =>
             {
@@ -122,7 +125,7 @@ export class WebSocket
 
                     if(deleteUsers.length > 0)
                     {
-                        this.godSocket.emit('disconnectNotRespondingUsers', deleteUsers);
+                        this.godSocket.emit('disconnectUsers', deleteUsers);
                     }
                 }
 

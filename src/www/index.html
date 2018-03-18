@@ -18,7 +18,8 @@
     var socket = io.connect('http://localhost:8100');
     socket.on('connected', function (data) 
     {
-            console.log(data);
+        console.log(data);
+        socket.emit('connectClient');
     });
 
         var txtUser1 = $("#User1");
