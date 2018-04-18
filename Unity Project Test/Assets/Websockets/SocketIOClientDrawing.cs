@@ -7,19 +7,24 @@ using Newtonsoft.Json;
 
 public class SocketIOClientDrawing : MonoBehaviour 
 {
-	public const string serverURL = "http://localhost:8100";
+	public const string serverURL = "http://localhost:3000";
 	protected Socket socket = null;
 	public DrawManager manager;
+	public Text connectionText;
+
+	private string status;
 
 	// Use this for initialization
 	void Start () 
 	{
 		openConnection ();
+		this.status = "Trying to connect to " + serverURL;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
+		connectionText.text = status;
 	}
 
 	void Destroy () 
@@ -37,6 +42,7 @@ public class SocketIOClientDrawing : MonoBehaviour
 		socket.On ("connected", (data) => {
 			Debug.Log(data);
 			socket.Emit("connectClient");
+			this.status = "Connected";
 
 			attachListener();
 		});

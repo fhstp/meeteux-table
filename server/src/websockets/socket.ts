@@ -70,7 +70,7 @@ export class WebSocket
             });
 
             socket.on('transmitDrawingData', (data) => {
-                // console.log(data);
+                console.log(data);
                 socket.broadcast.emit('receiveDrawingData', data);
             });
         });
