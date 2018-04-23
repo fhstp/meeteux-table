@@ -16,7 +16,7 @@ export class WebSocket
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('https://localhost:3000', { secure: true, reconnect: true, rejectUnauthorized : false });
+        this.godSocket = IOClient.connect('https://god.meeteux.fhstp.ac.at:3000', { secure: true, reconnect: true, rejectUnauthorized : false });
         this.odController = new OdController();
         this.database = Connection.getInstance();
         this.store = Store.getInstance();
