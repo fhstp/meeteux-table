@@ -70,7 +70,9 @@ export class WebSocket
             });
 
             socket.on('transmitDrawingData', (data) => {
-                console.log(data);
+                let json = JSON.parse(data);
+                let size = (json.trash.length)/1024;
+                console.log( JSON.stringify(json.pathNode) + " Data Size: " + size + "KB");
                 socket.broadcast.emit('receiveDrawingData', data);
             });
         });

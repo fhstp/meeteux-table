@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Drawing {
 
-	public Vector3[] pathNodes;
-	public int id;
+	public Vector3 pathNode;
+	public string id;
+	public string color;
 }

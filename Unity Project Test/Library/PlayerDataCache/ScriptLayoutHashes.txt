@@ -1,6 +1,6 @@
-WindowsStandalone
+OSXStandalone
 PlayerPath?
-/Users/niklas/Desktop/to_delete/UnityTable.exe
+/Users/niklas/Desktop/tmp/TableDrawing.app
 SceneListBegin?
 Assets/Drawing.unity
 SceneListEnd?
@@ -187,7 +187,7 @@ d2a2bd333db22f480a8589e167314ecc Vuforia.UnityExtensions.dll:Vuforia.UserDefined
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 06b0f9030a0e895448838628c620d1fe Assembly-CSharp.dll:.SocketIOClient
-8442b2284b95e4970824d929fef9ffb8 Assembly-CSharp.dll:.DrawManager
+dcb4ddc486893af4d4f7f01029b4f4fd Assembly-CSharp.dll:.DrawManager
 c8d7a1bb5cdc3c8aedce9d099d65fbba Assembly-CSharp.dll:.DynamicGridLayout
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour

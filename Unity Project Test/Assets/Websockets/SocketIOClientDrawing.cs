@@ -7,10 +7,12 @@ using Newtonsoft.Json;
 
 public class SocketIOClientDrawing : MonoBehaviour 
 {
-	public const string serverURL = "http://localhost:3000";
+	public const string serverURL = "http://localhost:8100";
 	protected Socket socket = null;
 	public DrawManager manager;
 	public Text connectionText;
+
+	private bool connected = false;
 
 	private string status;
 
@@ -39,12 +41,18 @@ public class SocketIOClientDrawing : MonoBehaviour
 
 		socket = IO.Socket (serverURL);
 
+		socket.Listeners("receiveDrawingData").Clear();
+
 		socket.On ("connected", (data) => {
-			Debug.Log(data);
+			//Debug.Log(data);
 			socket.Emit("connectClient");
 			this.status = "Connected";
 
-			attachListener();
+			if(!connected)
+			{
+				connected = true;
+				attachListener();
+			}
 		});
 
 	}
@@ -61,7 +69,7 @@ public class SocketIOClientDrawing : MonoBehaviour
 	void attachListener()
 	{
 		socket.On ("receiveDrawingData", (data) => {
-
+			//Debug.Log(data);
 			string str = data.ToString();
 			Drawing result = JsonConvert.DeserializeObject<Drawing> (str);
 			this.manager.updateData(result);
