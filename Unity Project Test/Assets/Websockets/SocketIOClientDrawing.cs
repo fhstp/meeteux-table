@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Quobject.SocketIoClientDotNet.Client;
 using Newtonsoft.Json;
+using System;
 
 public class SocketIOClientDrawing : MonoBehaviour 
 {
@@ -73,6 +74,16 @@ public class SocketIOClientDrawing : MonoBehaviour
 			string str = data.ToString();
 			Drawing result = JsonConvert.DeserializeObject<Drawing> (str);
 			this.manager.updateData(result);
+		});
+
+		socket.On ("receiveBigData", (data) => {
+			string str = data.ToString();
+			BigData result = JsonConvert.DeserializeObject<BigData> (str);
+
+			DateTime now = System.DateTime.Now;
+			TimeSpan span = now.Subtract(result.timestamp);
+
+			Debug.Log("Received Big Data. Time: " + span.Seconds + " sec");
 		});
 	}
 }

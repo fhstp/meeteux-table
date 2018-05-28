@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\UIScripts\DynamicGridLayout.cs" />
+     <Compile Include="Assets\Websockets\BigData.cs" />
      <Compile Include="Assets\Websockets\Drawing.cs" />
      <Compile Include="Assets\Websockets\DrawManager.cs" />
      <Compile Include="Assets\Websockets\SocketIOClient.cs" />

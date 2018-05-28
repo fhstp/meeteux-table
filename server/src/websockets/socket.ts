@@ -75,6 +75,13 @@ export class WebSocket
                 console.log( JSON.stringify(json.pathNode) + " Data Size: " + size + "KB");
                 socket.broadcast.emit('receiveDrawingData', data);
             });
+
+            socket.on('transmitBigData', (data)  => {
+                let json = JSON.parse(data);
+                let size = (json.trash.length)/(1024*1024);
+                console.log("Sending Big Data: " + size + "MB");
+                socket.broadcast.emit('receiveBigData', data);
+            })
         });
     }
 
