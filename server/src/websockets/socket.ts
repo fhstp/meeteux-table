@@ -13,6 +13,8 @@ export class WebSocket
     private store: Store;
     private EXPIRATION_TIME = 1000 * 60;
 
+    private tableClientSocket: any;
+
     constructor(server: any)
     {
         this.odSocket = new IO(server);
@@ -33,6 +35,9 @@ export class WebSocket
 
             socket.on('connectClient', () => {
                 this.startUserStatusIntervall(socket);
+
+                this.tableClientSocket = socket.id;
+                // console.log(this.tableClientSocket);
             });
 
             socket.on('connectOD', (data) =>
@@ -44,7 +49,7 @@ export class WebSocket
 
                 this.odController.requestData().then( (values) =>
                 {
-                    socket.broadcast.emit('requestDataResult', values);
+                    socket.to(this.tableClientSocket).emit('requestDataResult', values);
                 });
             });
 
@@ -64,23 +69,23 @@ export class WebSocket
 
                     this.odController.requestData().then( (values) =>
                     {
-                        socket.broadcast.emit('requestDataResult', values);
+                        socket.to(this.tableClientSocket).emit('requestDataResult', values);
                     });
                 });
             });
 
             socket.on('transmitDrawingData', (data) => {
-                let json = JSON.parse(data);
-                let size = (json.trash.length)/1024;
-                console.log( JSON.stringify(json.pathNode) + " Data Size: " + size + "KB");
-                socket.broadcast.emit('receiveDrawingData', data);
+                // let json = JSON.parse(data);
+                // let size = (json.trash.length)/1024;
+                // console.log( JSON.stringify(json.pathNode) + " Data Size: " + size + "KB");
+                socket.to(this.tableClientSocket).emit('receiveDrawingData', data);
             });
 
             socket.on('transmitBigData', (data)  => {
-                let json = JSON.parse(data);
-                let size = (json.trash.length)/(1024*1024);
-                console.log("Sending Big Data: " + size + "MB");
-                socket.broadcast.emit('receiveBigData', data);
+                // let json = JSON.parse(data);
+                // let size = (json.trash.length)/(1024*1024);
+                // console.log("Sending Big Data: " + size + "MB");
+                socket.to(this.tableClientSocket).emit('receiveBigData', data);
             })
         });
     }
@@ -145,7 +150,7 @@ export class WebSocket
 
                 this.odController.requestData().then( (values) =>
                 {
-                    socket.broadcast.emit('requestDataResult', values);
+                    socket.to(this.tableClientSocket).emit('requestDataResult', values);
                 });
             });
             socket.broadcast.emit('exhibitStatusCheck');
