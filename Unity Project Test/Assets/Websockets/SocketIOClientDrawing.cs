@@ -12,6 +12,7 @@ public class SocketIOClientDrawing : MonoBehaviour
 	protected Socket socket = null;
 	public DrawManager manager;
 	public Text connectionText;
+	public Text dataText;
 
 	private bool connected = false;
 
@@ -82,6 +83,8 @@ public class SocketIOClientDrawing : MonoBehaviour
 
 			DateTime now = System.DateTime.Now;
 			TimeSpan span = now.Subtract(result.timestamp);
+
+			dataText.text = "Received Big Data. Time: " + span.Seconds + " sec";
 
 			Debug.Log("Received Big Data. Time: " + span.Seconds + " sec");
 		});
