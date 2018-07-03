@@ -32,15 +32,33 @@ public class DrawManager : MonoBehaviour {
 		foreach (Drawing d in tmpData) 
 		{
 			LineRenderer tmp = null;
+
+			float xPos = d.pathNode.x;
+			float yPos = d.pathNode.y;
+
+			float widthFactor = ((float)Screen.width) / ((float)d.width);
+			float heightFactor = ((float)Screen.height) / ((float)d.height);
+
+			Debug.Log ("Smartphone: width=" + d.width +  " height=" + d.height);
+			Debug.Log ("Table: width=" + Screen.width + "  height=" + Screen.height);
+
+			//Debug.Log ("widthFactor= " + Screen.width + "/" + d.width + "=" + ((float)Screen.width) / ((float)d.width));
+			//Debug.Log ("heightFactor= " + Screen.height + "/" + d.height + "=" + ((float)Screen.height) / ((float)d.height));
+
+			Vector3 newPosition = new Vector3 ();
+			newPosition.x = xPos * widthFactor;
+			newPosition.y = yPos * widthFactor;
+			newPosition.z = d.pathNode.z;
+
 			// Debug.Log (d.id);
 			if (drawings.TryGetValue (d.id, out tmp)) 
 			{
 				tmp.positionCount++;
-				tmp.SetPosition(tmp.positionCount-1, d.pathNode);
+				tmp.SetPosition(tmp.positionCount-1, newPosition);
 			} 
 			else 
 			{
-				this.drawNewLine (d.id, d.pathNode, d.color);
+				this.drawNewLine (d.id, newPosition, d.color);
 			}
 		}
 		data.Clear (); 
