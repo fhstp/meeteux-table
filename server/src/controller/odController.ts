@@ -56,6 +56,15 @@ export class OdController
         });
     }
 
+    public findUser(id: Number): any
+    {
+        return this.database.user.findById(id).then((user) =>{
+            return user;
+        }).catch((err) => {
+            return "Failed";
+        });
+    }
+
 
     public updateUserStatus(user): void
     {
