@@ -4,55 +4,151 @@
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+            </style>
 </head>
 <body>
 <h1>Connected on Table</h1>
-<h2 id="User1"></h2>
-<h2 id="User2"></h2>
-<h2 id="User3"></h2>
-<h2 id="User4"></h2>
+<table>
+    <tr>
+        <th>User</th>
+        <th>Message</th>
+        <th>Timestamp</th>
+        <th>Kick</th>
+    </tr>
+    <tr>
+        <th><h2 id="User1"></h2></th>
+        <th><p id="Message1"></p></h2></th>
+        <th><p id="timeStamp1"></h2></th>
+        <th><button id="kick1" style="display: none">Kick</button></h2></th>
+    </tr>
+    <tr>
+            <th><h2 id="User2"></h2></th>
+            <th><p id="Message2"></p></h2></th>
+            <th><p id="timeStamp2"></h2></th>
+            <th><button id="kick2" style="display: none">Kick</button></h2></th>
+    </tr>
+    <tr>
+            <th><h2 id="User3"></h2></th>
+            <th><p id="Message3"></p></h2></th>
+            <th><p id="timeStamp3"></h2></th>
+            <th><button id="kick3" style="display: none">Kick</button></h2></th>
+    </tr>
+    <tr>
+            <th><h2 id="User4"></h2></th>
+            <th><p id="Message4"></p></h2></th>
+            <th><p id="timeStamp4"></h2></th>
+            <th><button id="kick4" style="display: none">Kick</button></h2></th>
+    </tr>
+</table>
 <button id="requestUser">requestUser</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://localhost:8100');
-    //console.log(socket);
-    socket.on('connected', function (data) 
-    {
-        console.log(data);
-        socket.emit('connectClient');
-    });
+    
+    var socket = io.connect('http://localhost:3000');
+    socket.on('connected', function (data) {
+            //console.log(data);
+        });
 
-        var txtUser1 = $("#User1");
-        var txtUser2 = $("#User2");
-        var txtUser3 = $("#User3");
-        var txtUser4 = $("#User4");
+        var txtUser1 = $("#User1"); var message1 = $("#Message1"); var timeStamp1 = $("#Timestamp1"); var kick1 = $("#Kick1");
+        var txtUser2 = $("#User2"); var message1 = $("#Message1"); var timeStamp2 = $("#Timestamp2"); var kick2 = $("#Kick2");
+        var txtUser3 = $("#User3"); var message1 = $("#Message1"); var timeStamp3 = $("#Timestamp3"); var kick3 = $("#Kick3");
+        var txtUser4 = $("#User4"); var message1 = $("#Message1"); var timeStamp4 = $("#Timestamp4"); var kick4 = $("#Kick4");
 
+        
     socket.on('requestDataResult', function(data){
-        
-        txtUser1.text('');
-        txtUser2.text('');
-        txtUser3.text('');
-        txtUser4.text('');
-        
-        
         for(var i = 0; i<data.users.length;i++){
-            if(i==0){txtUser1.text(data.users[i].name + ' - ' + data.users[i].location);}
-            if(i==1){txtUser2.text(data.users[i].name + ' - ' + data.users[i].location);}
-            if(i==2){txtUser3.text(data.users[i].name + ' - ' + data.users[i].location);}
-            if(i==3){txtUser4.text(data.users[i].name + ' - ' + data.users[i].location);}
+            console.log(data.users[i].name);
+            if(i==0){txtUser1.text(data.users[i].name);
+                message1.text(data.users[i].message);
+                timeStamp1.text(data.users[i].message.time)
+                document.getElementById("Kick1").style.display="block";}
+            if(i==1){txtUser2.text(data.users[i].name);
+                message2.text(data.users[i].message);
+                timeStamp2.text(data.users[i].message.time)
+                document.getElementById("Kick2").style.display="block";}
+            if(i==2){txtUser3.text(data.users[i].name);
+                message3.text(data.users[i].message);
+                timeStamp3.text(data.users[i].message.time)
+                document.getElementById("Kick3").style.display="block";}
+            if(i==3){txtUser4.text(data.users[i].name);
+                message4.text(data.users[i].message);
+                timeStamp4.text(data.users[i].message.time)
+                document.getElementById("Kick4").style.display="block";}
         }
     });
 
     var requestUserButton = $("#requestUser");
 
-    function triggerRequestData(){
+    function triggerRequestData(){   
         socket.emit('requestData')
     }
 
     requestUserButton.click(function() {
+        
         triggerRequestData();
     });
+
+    var kickUser = $("#Kick4");
+    function triggerKick4(){
+        socket.emit('closeConnection', txtUser4.text())
+        txtUser4.text("");
+        message4.text("");
+        timeStamp4.text("");
+    }
+    kickUser.click(function(){
+        triggerKick4();
+    });
+
+    var kickUser = $("#Kick3");
+    function triggerKick3(){
+        socket.emit('closeConnection', txtUser3.text())
+        txtUser3.text("");
+        message3.text("");
+        timeStamp3.text("");
+    }
+    kickUser.click(function(){
+        triggerKick3();
+    });
+
+    var kickUser = $("#Kick2");
+    function triggerKick2(){
+        socket.emit('closeConnection', txtUser2.text())
+        txtUser2.text("");
+        message2.text("");
+        timeStamp2.text("");
+    }
+    kickUser.click(function(){
+        triggerKick2();
+    });
+
+    var kickUser = $("#Kick1");
+    function triggerKick1(){
+        socket.emit('closeConnection', txtUser1.text())
+        txtUser1.text("");
+        message1.text("");
+        timeStamp1.text("");
+    }
+    kickUser.click(function(){
+        triggerKick1();
+    });
+
 </script>
 </body>
 </html>
