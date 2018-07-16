@@ -71,6 +71,11 @@ export class Connection
             statusTime: {
                 type: Sequelize.DATE,
                 alllowNull: true
+            },
+            message: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: ""
             }
         });
 
