@@ -74,6 +74,13 @@ export class WebSocket
                 });
             });
 
+            socket.on('sendMessage', (data) => {
+                this.odController.updateMessage(data).then( (values) =>
+                {
+                    socket.emit('requestDataResult', values);
+                });
+            });
+
             socket.on('transmitDrawingData', (data) => {
                 // let json = JSON.parse(data);
                 // let size = (json.trash.length)/1024;
@@ -86,7 +93,7 @@ export class WebSocket
                 // let size = (json.trash.length)/(1024*1024);
                 // console.log("Sending Big Data: " + size + "MB");
                 socket.to(this.tableClientSocket).emit('receiveBigData', data);
-            })
+            });
         });
     }
 

@@ -4,7 +4,7 @@ require('dotenv').config();
 export class Connection
 {
     private static _instance: Connection;
-    private _sequelize: any;
+    private readonly _sequelize: any;
     private _user: any;
     private _exhibit: any;
 
@@ -13,7 +13,7 @@ export class Connection
         this._sequelize = new Sequelize('null', 'null', 'null', {
             dialect: 'sqlite',
             storage: 'database.sqlite',
-            logging: false
+            logging: true
         });
         this.initDatabaseTables();
         this.initDatabaseRelations();
@@ -66,7 +66,7 @@ export class Connection
             },
             location: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: true
             },
             statusTime: {
                 type: Sequelize.DATE,

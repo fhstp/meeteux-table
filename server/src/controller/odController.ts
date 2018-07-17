@@ -21,7 +21,7 @@ export class OdController
             name: username,
             location: locationName,
             statusTime: Date.now()
-        }).then( (user) => {
+        }).then( () => {
             return "Connected to Table"
         }).catch((err) => {
             console.log(err);
@@ -35,6 +35,19 @@ export class OdController
             return {users};
         }).catch((err) => {
             return "Failed";
+        });
+    }
+
+    public updateMessage(data): any
+    {
+        const message = data.message;
+        return this.database.user.findById(data.user.id).then((user) =>{
+            let newMessage = user.message + message;
+            return this.database.user.update({message: newMessage},{where: {id: user.id}}).then(() => {
+                return this.database.user.findAll().then((users) =>{
+                    return users;
+                });
+            });
         });
     }
 

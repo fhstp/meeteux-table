@@ -34,25 +34,25 @@
     <tr>
         <th><h2 id="User1"></h2></th>
         <th><p id="Message1"></p></h2></th>
-        <th><p id="timeStamp1"></h2></th>
+        <th><p id="TimeStamp1"></p></th>
         <th><button id="kick1" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
             <th><h2 id="User2"></h2></th>
             <th><p id="Message2"></p></h2></th>
-            <th><p id="timeStamp2"></h2></th>
+            <th><p id="TimeStamp2"></p></th>
             <th><button id="kick2" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
             <th><h2 id="User3"></h2></th>
             <th><p id="Message3"></p></h2></th>
-            <th><p id="timeStamp3"></h2></th>
+            <th><p id="TimeStamp3"></p></th>
             <th><button id="kick3" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
             <th><h2 id="User4"></h2></th>
             <th><p id="Message4"></p></h2></th>
-            <th><p id="timeStamp4"></h2></th>
+            <th><p id="TimeStamp4"></p></th>
             <th><button id="kick4" style="display: none">Kick</button></h2></th>
     </tr>
 </table>
@@ -61,36 +61,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
     
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('http://localhost:8100');
     socket.on('connected', function (data) {
             //console.log(data);
         });
 
-        var txtUser1 = $("#User1"); var message1 = $("#Message1"); var timeStamp1 = $("#Timestamp1"); var kick1 = $("#Kick1");
-        var txtUser2 = $("#User2"); var message1 = $("#Message1"); var timeStamp2 = $("#Timestamp2"); var kick2 = $("#Kick2");
-        var txtUser3 = $("#User3"); var message1 = $("#Message1"); var timeStamp3 = $("#Timestamp3"); var kick3 = $("#Kick3");
-        var txtUser4 = $("#User4"); var message1 = $("#Message1"); var timeStamp4 = $("#Timestamp4"); var kick4 = $("#Kick4");
+        var txtUser1 = $("#User1"); var message1 = $("#Message1"); var timeStamp1 = $("#TimeStamp1"); var kick1 = $("#Kick1");
+        var txtUser2 = $("#User2"); var message2 = $("#Message1"); var timeStamp2 = $("#TimeStamp2"); var kick2 = $("#Kick2");
+        var txtUser3 = $("#User3"); var message3 = $("#Message1"); var timeStamp3 = $("#TimeStamp3"); var kick3 = $("#Kick3");
+        var txtUser4 = $("#User4"); var message4 = $("#Message1"); var timeStamp4 = $("#TimeStamp4"); var kick4 = $("#Kick4");
 
         
     socket.on('requestDataResult', function(data){
         for(var i = 0; i<data.users.length;i++){
-            console.log(data.users[i].name);
+            console.log(data.users[i].statusTime);
             if(i==0){txtUser1.text(data.users[i].name);
                 message1.text(data.users[i].message);
-                timeStamp1.text(data.users[i].message.time)
-                document.getElementById("Kick1").style.display="block";}
+                var date1 = new Date(data.users[i].statusTime);
+                timeStamp1.text(date1.getHours() + ":" + date1.getMinutes()+ ":" + date1.getSeconds());
+                document.getElementById("kick1").style.display="block";}
             if(i==1){txtUser2.text(data.users[i].name);
                 message2.text(data.users[i].message);
-                timeStamp2.text(data.users[i].message.time)
-                document.getElementById("Kick2").style.display="block";}
+                var date2 = new Date(data.users[i].statusTime);
+                timeStamp1.text(date2.getHours() + ":" + date2.getMinutes()+ ":" + date2.getSeconds());
+                document.getElementById("kick2").style.display="block";}
             if(i==2){txtUser3.text(data.users[i].name);
                 message3.text(data.users[i].message);
-                timeStamp3.text(data.users[i].message.time)
-                document.getElementById("Kick3").style.display="block";}
+                var date3 = new Date(data.users[i].statusTime);
+                timeStamp1.text(date3.getHours() + ":" + date3.getMinutes()+ ":" + date3.getSeconds());
+                document.getElementById("kick3").style.display="block";}
             if(i==3){txtUser4.text(data.users[i].name);
                 message4.text(data.users[i].message);
-                timeStamp4.text(data.users[i].message.time)
-                document.getElementById("Kick4").style.display="block";}
+                var date4 = new Date(data.users[i].statusTime);
+                timeStamp1.text(date4.getHours() + ":" + date4.getMinutes()+ ":" + date4.getSeconds());
+                document.getElementById("kick4").style.display="block";}
         }
     });
 
