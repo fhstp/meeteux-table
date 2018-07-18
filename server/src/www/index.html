@@ -32,25 +32,25 @@
         <th>Kick</th>
     </tr>
     <tr>
-        <th><h2 id="User1"></h2></th>
+        <th><h2 id="User1"></h2><p id="UserId1" style="display: none"></p></th>
         <th><p id="Message1"></p></h2></th>
         <th><p id="TimeStamp1"></p></th>
         <th><button id="kick1" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
-            <th><h2 id="User2"></h2></th>
+            <th><h2 id="User2"></h2><p id="UserId2" style="display: none"></p></th>
             <th><p id="Message2"></p></h2></th>
             <th><p id="TimeStamp2"></p></th>
             <th><button id="kick2" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
-            <th><h2 id="User3"></h2></th>
+            <th><h2 id="User3"></h2><p id="UserId3" style="display: none"></p></th>
             <th><p id="Message3"></p></h2></th>
             <th><p id="TimeStamp3"></p></th>
             <th><button id="kick3" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
-            <th><h2 id="User4"></h2></th>
+            <th><h2 id="User4"></h2><p id="UserId4" style="display: none"></p></th>
             <th><p id="Message4"></p></h2></th>
             <th><p id="TimeStamp4"></p></th>
             <th><button id="kick4" style="display: none">Kick</button></h2></th>
@@ -66,31 +66,35 @@
             //console.log(data);
         });
 
-        var txtUser1 = $("#User1"); var message1 = $("#Message1"); var timeStamp1 = $("#TimeStamp1"); var kick1 = $("#Kick1");
-        var txtUser2 = $("#User2"); var message2 = $("#Message1"); var timeStamp2 = $("#TimeStamp2"); var kick2 = $("#Kick2");
-        var txtUser3 = $("#User3"); var message3 = $("#Message1"); var timeStamp3 = $("#TimeStamp3"); var kick3 = $("#Kick3");
-        var txtUser4 = $("#User4"); var message4 = $("#Message1"); var timeStamp4 = $("#TimeStamp4"); var kick4 = $("#Kick4");
+        var txtUser1 = $("#User1"); var UserId1 = $("#UserId1"); var message1 = $("#Message1"); var timeStamp1 = $("#TimeStamp1"); var kick1 = $("#Kick1");
+        var txtUser2 = $("#User2"); var UserId2 = $("#UserId2"); var message2 = $("#Message1"); var timeStamp2 = $("#TimeStamp2"); var kick2 = $("#Kick2");
+        var txtUser3 = $("#User3"); var UserId3 = $("#UserId3"); var message3 = $("#Message1"); var timeStamp3 = $("#TimeStamp3"); var kick3 = $("#Kick3");
+        var txtUser4 = $("#User4"); var UserId4 = $("#UserId4"); var message4 = $("#Message1"); var timeStamp4 = $("#TimeStamp4"); var kick4 = $("#Kick4");
 
         
     socket.on('requestDataResult', function(data){
         for(var i = 0; i<data.users.length;i++){
             console.log(data.users[i].statusTime);
             if(i==0){txtUser1.text(data.users[i].name);
+                UserId1.text(data.users[i].i);
                 message1.text(data.users[i].message);
                 var date1 = new Date(data.users[i].statusTime);
                 timeStamp1.text(date1.getHours() + ":" + date1.getMinutes()+ ":" + date1.getSeconds());
                 document.getElementById("kick1").style.display="block";}
             if(i==1){txtUser2.text(data.users[i].name);
+                UserId2.text(data.users[i].i);
                 message2.text(data.users[i].message);
                 var date2 = new Date(data.users[i].statusTime);
                 timeStamp1.text(date2.getHours() + ":" + date2.getMinutes()+ ":" + date2.getSeconds());
                 document.getElementById("kick2").style.display="block";}
             if(i==2){txtUser3.text(data.users[i].name);
+                UserId3.text(data.users[i].i);
                 message3.text(data.users[i].message);
                 var date3 = new Date(data.users[i].statusTime);
                 timeStamp1.text(date3.getHours() + ":" + date3.getMinutes()+ ":" + date3.getSeconds());
                 document.getElementById("kick3").style.display="block";}
             if(i==3){txtUser4.text(data.users[i].name);
+                UserId4.text(data.users[i].i);
                 message4.text(data.users[i].message);
                 var date4 = new Date(data.users[i].statusTime);
                 timeStamp1.text(date4.getHours() + ":" + date4.getMinutes()+ ":" + date4.getSeconds());
@@ -114,6 +118,7 @@
         document.getElementById("User4").textContent = "";
         document.getElementById("Message4").innerHTML = "";
         document.getElementById("TimeStamp4").textContent = "";
+        document.getElementById("UserId4").textContent = "";
         socket.emit('closeConnection', txtUser4.text()) 
     }
     kickUser.click(function(){
@@ -125,6 +130,7 @@
         document.getElementById("User3").textContent = "";
         document.getElementById("Message3").innerHTML = "";
         document.getElementById("TimeStamp3").textContent = "";
+        document.getElementById("UserId3").textContent = "";
         socket.emit('closeConnection', txtUser3.text())
     }
     kickUser.click(function(){
@@ -136,6 +142,7 @@
         document.getElementById("User2").textContent = "";
         document.getElementById("Message2").innerHTML = "";
         document.getElementById("TimeStamp2").textContent = "";
+        document.getElementById("UserId2").textContent = "";
         socket.emit('closeConnection', txtUser2.text())
     }
     kickUser.click(function(){
@@ -147,6 +154,7 @@
         document.getElementById("User1").textContent = "";
         document.getElementById("Message1").innerHTML = "";
         document.getElementById("TimeStamp1").textContent = "";
+        document.getElementById("UserId1").textContent = "";
         socket.emit('closeConnection', txtUser1.text())
     }
     kickUser.click(function(){
