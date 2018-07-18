@@ -44,9 +44,9 @@
             <th><button id="kick2" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
-            <th><h2 id="User3"></h2></th>
-            <th><p id="Message3"></p></h2></th>
-            <th><p id="TimeStamp3"></p></th>
+            <th><h2 id="User3">sdfsd</h2></th>
+            <th><p id="Message3">sdfds</p></h2></th>
+            <th><p id="TimeStamp3">sdfsdf</p></th>
             <th><button id="kick3" style="display: none">Kick</button></h2></th>
     </tr>
     <tr>
@@ -105,49 +105,49 @@
     }
 
     requestUserButton.click(function() {
-        
+        window.alert("sometext");
         triggerRequestData();
     });
 
-    var kickUser = $("#Kick4");
+    var kickUser = $("#kick4");
     function triggerKick4(){
-        socket.emit('closeConnection', txtUser4.text())
-        txtUser4.text("");
-        message4.text("");
-        timeStamp4.text("");
+        document.getElementById("User4").textContent = "";
+        document.getElementById("Message4").innerHTML = "";
+        document.getElementById("TimeStamp4").textContent = "";
+        socket.emit('closeConnection', txtUser4.text()) 
     }
     kickUser.click(function(){
         triggerKick4();
     });
 
-    var kickUser = $("#Kick3");
+    var kickUser = $("#kick3");
     function triggerKick3(){
+        document.getElementById("User3").textContent = "";
+        document.getElementById("Message3").innerHTML = "";
+        document.getElementById("TimeStamp3").textContent = "";
         socket.emit('closeConnection', txtUser3.text())
-        txtUser3.text("");
-        message3.text("");
-        timeStamp3.text("");
     }
     kickUser.click(function(){
         triggerKick3();
     });
 
-    var kickUser = $("#Kick2");
+    var kickUser = $("#kick2");
     function triggerKick2(){
+        document.getElementById("User2").textContent = "";
+        document.getElementById("Message2").innerHTML = "";
+        document.getElementById("TimeStamp2").textContent = "";
         socket.emit('closeConnection', txtUser2.text())
-        txtUser2.text("");
-        message2.text("");
-        timeStamp2.text("");
     }
     kickUser.click(function(){
         triggerKick2();
     });
 
-    var kickUser = $("#Kick1");
+    var kickUser = $("#kick1");
     function triggerKick1(){
+        document.getElementById("User1").textContent = "";
+        document.getElementById("Message1").innerHTML = "";
+        document.getElementById("TimeStamp1").textContent = "";
         socket.emit('closeConnection', txtUser1.text())
-        txtUser1.text("");
-        message1.text("");
-        timeStamp1.text("");
     }
     kickUser.click(function(){
         triggerKick1();
