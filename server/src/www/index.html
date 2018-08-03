@@ -125,9 +125,9 @@
         var tableRows = elmTable.getElementsByTagName('tr')
         var rowCount = tableRows.length;
         console.log("lengh " + data.users.length);
-        for(var x=rowCount; x>1; x--){
+        for(var x=rowCount; x>=1; x--){
             console.log("del: " + x);
-            elmTable.removeChild(tableRows[x]);
+            elmTable.removeChild(tableRows[x-1]);
         }
         
         
