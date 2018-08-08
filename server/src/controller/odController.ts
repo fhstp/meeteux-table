@@ -10,7 +10,7 @@ export class OdController
         this.database = Connection.getInstance();
     }
 
-    public connectOD(data: any): any
+    public connectOD(data: any, socketId: any): any
     {
         const identifier = data.user.id;
         const username = data.user.name;
@@ -20,7 +20,8 @@ export class OdController
             id: identifier,
             name: username,
             location: locationName,
-            statusTime: Date.now()
+            statusTime: Date.now(),
+            socketId
         }).then( () => {
             return "Connected to Table"
         }).catch((err) => {
@@ -53,7 +54,7 @@ export class OdController
 
     public removeUser(user): any
     {
-        return this.database.user.destroy({where: {id: user.id}}).then(() =>{
+        return this.database.user.destroy({where: {id: user}}).then(() =>{
             return "SUCCESS";
         }).catch((err) => {
             return "Failed";

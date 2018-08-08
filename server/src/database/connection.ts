@@ -19,21 +19,6 @@ export class Connection
         this.initDatabaseRelations();
 
         this._sequelize.sync();
-
-        /* this._sequelize.sync({force: true}).then(() => {
-            this._user.create({
-                id: 1,
-                name: 'Schlese'
-            });
-            this._user.create({
-                id: 2,
-                name: 'Rowsdower'
-            });
-            this._user.create({
-                id: 3,
-                name: 'Cookie Monster'
-            });
-        });*/
     }
 
     public static getInstance(): Connection
@@ -76,6 +61,10 @@ export class Connection
                 type: Sequelize.STRING,
                 allowNull: false,
                 defaultValue: ""
+            },
+            socketId: {
+                type: Sequelize.STRING,
+                allowNull: false,
             }
         });
 

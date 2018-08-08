@@ -3,6 +3,7 @@ import * as IOClient from 'socket.io-client';
 import  { Connection, Store } from '../database';
 import { OdController } from "../controller";
 import * as os from 'os';
+require('dotenv').config();
 
 export class WebSocket
 {
@@ -18,7 +19,7 @@ export class WebSocket
     constructor(server: any)
     {
         this.odSocket = new IO(server);
-        this.godSocket = IOClient.connect('https://god.meeteux.fhstp.ac.at:3000', { secure: true, reconnect: true, rejectUnauthorized : false });
+        this.godSocket = IOClient.connect(process.env.GOD_URL, { secure: true, reconnect: true, rejectUnauthorized : false });
         this.odController = new OdController();
         this.database = Connection.getInstance();
         this.store = Store.getInstance();
@@ -42,7 +43,7 @@ export class WebSocket
 
             socket.on('connectOD', (data) =>
             {
-                this.odController.connectOD(data).then( (values) =>
+                this.odController.connectOD(data, socket.id).then( (values) =>
                 {
                     socket.emit('connectODResult', values);
                 });
@@ -63,13 +64,32 @@ export class WebSocket
 
             socket.on('closeConnection', (user) =>
             {
-                this.odController.removeUser(user).then( (result) =>
+                console.log(user);
+                this.odController.removeUser(user.id).then( (result) =>
                 {
                     socket.emit('closeConnectionResult', result);
 
                     this.odController.requestData().then( (values) =>
                     {
-                        socket.to(this.tableClientSocket).emit('requestDataResult', values);
+                        socket.broadcast.emit('requestDataResult', values);
+                    });
+                });
+            });
+
+            socket.on('kickUser', (userId) =>
+            {
+                this.odController.findUser(userId).then((user) => {
+                    this.odController.removeUser(userId).then( (result) =>
+                    {
+                        if(result === 'SUCCESS')
+                        {
+                            this.odSocket.sockets.connected[user.socketId].disconnect();
+
+                            this.odController.requestData().then( (values) =>
+                            {
+                                socket.to(this.tableClientSocket).emit('requestDataResult', values);
+                            });
+                        }
                     });
                 });
             });
@@ -77,7 +97,7 @@ export class WebSocket
             socket.on('sendMessage', (data) => {
                 this.odController.updateMessage(data).then( (values) =>
                 {
-                    socket.emit('requestDataResult', values);
+                    socket.broadcast.emit('requestDataResult', values);
                 });
             });
 
@@ -126,7 +146,7 @@ export class WebSocket
 
             });
           });
-
+        address = 'localhost';
         console.log('IP-Adresse: ' + address);
         this.godSocket.emit('loginExhibit', address);
     }
@@ -144,7 +164,7 @@ export class WebSocket
                         if(((Date.now()) - user.statusTime) > this.EXPIRATION_TIME)
                         {
                             // console.log((Date.now()) - user.statusTime + " ______ "+ this.EXPIRATION_TIME);
-                            this.odController.removeUser(user);
+                            this.odController.removeUser(user.id);
                             deleteUsers.push(user);
                         }
                     }

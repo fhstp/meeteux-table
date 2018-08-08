@@ -1,277 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>MEETeUX Table</title>
     <style>
-            table {
-                font-family: arial, sans-serif;
-                border-collapse: collapse;
-                width: 100%;
-            }
-            
-            td, th {
-                border: 1px solid #dddddd;
-                text-align: left;
-                padding: 8px;
-            }
-            
-            tr:nth-child(even) {
-                background-color: #dddddd;
-            }
-            </style>
+        main {
+            margin-top: 40px;
+        }
+
+        #requestUser {
+            margin: 10px 20px;
+        }
+    </style>
 </head>
 <body>
-<h1>Connected on Table</h1>
-<button id="addRow">AddRow</button>
-<table id="table">
-    <thead>
-        <th>UserId</th>
-        <th>User</th>
-        <th>Message</th>
-        <th>Timestamp</th>
-        <th>Kick</th>
-    </thead>
-    <!-- <tr>
-        <th><p id="UserId1"</p></th>
-        <th><h2 id="User1"></h2></th>
-        <th><p id="Message1"></p></h2></th>
-        <th><p id="TimeStamp1"></p></th>
-        <th><button id="kick1" style="display: none">Kick</button></h2></th>
-    </tr>
-    <tr>
-        <th><h2 id="User2"></h2><p id="UserId2" style="display: none"></p></th>
-        <th><p id="Message2"></p></h2></th>
-        <th><p id="TimeStamp2"></p></th>
-        <th><button id="kick2" style="display: none">Kick</button></h2></th>
-    </tr>
-    <tr>
-        <th><h2 id="User3"></h2><p id="UserId3" style="display: none"></p></th>
-        <th><p id="Message3"></p></h2></th>
-        <th><p id="TimeStamp3"></p></th>
-        <th><button id="kick3" style="display: none">Kick</button></h2></th>
-    </tr>
-    <tr>
-        <th><h2 id="User4"></h2><p id="UserId4" style="display: none"></p></th>
-        <th><p id="Message4"></p></h2></th>
-        <th><p id="TimeStamp4"></p></th>
-        <th><button id="kick4" style="display: none">Kick</button></h2></th>
-    </tr> -->
-</table>
-<button id="requestUser">requestUser</button>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Active Exhibit</h1>
+                <table id="table" class="table  table-striped">
+                    <thead>
+                        <th scope="col">UserId</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Timestamp</th>
+                        <th scope="col">Kick</th>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <button id="requestUser" type="button" class="btn btn-primary">requestUser</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
 <script>
+    const socket = io.connect('http://localhost:8100');
 
-    var count = 0;
-    var socket = io.connect('http://localhost:8100');
-    socket.on('connected', function (data) {
-            //console.log(data);
-        });
+    socket.emit('connectClient');
 
-        var txtUser1 = $("#User1"); var UserId1 = $("#UserId1"); var message1 = $("#Message1"); var timeStamp1 = $("#TimeStamp1"); var kick1 = $("#Kick1");
-        var txtUser2 = $("#User2"); var UserId2 = $("#UserId2"); var message2 = $("#Message1"); var timeStamp2 = $("#TimeStamp2"); var kick2 = $("#Kick2");
-        var txtUser3 = $("#User3"); var UserId3 = $("#UserId3"); var message3 = $("#Message1"); var timeStamp3 = $("#TimeStamp3"); var kick3 = $("#Kick3");
-        var txtUser4 = $("#User4"); var UserId4 = $("#UserId4"); var message4 = $("#Message1"); var timeStamp4 = $("#TimeStamp4"); var kick4 = $("#Kick4");
+    socket.on('requestDataResult', function(data)
+    {
+        //removing all content rows
+        $("#table tbody tr").remove();
 
-        
-    // socket.on('requestDataResult', function(data){
-    //     console.log(data.users.length);        
-    //     for(var i = 0; i<data.users.length;i++){
-    //         console.log(data.users[i].statusTime);
-    //         if(i==0){txtUser1.text(data.users[i].name);
-    //             UserId1.text(data.users[i].i);
-    //             message1.text(data.users[i].message);
-    //             var date1 = new Date(data.users[i].statusTime);
-    //             timeStamp1.text(date1.getHours() + ":" + date1.getMinutes()+ ":" + date1.getSeconds());
-    //             document.getElementById("kick1").style.display="block";}
-    //         if(i==1){txtUser2.text(data.users[i].name);
-    //             UserId2.text(data.users[i].i);
-    //             message2.text(data.users[i].message);
-    //             var date2 = new Date(data.users[i].statusTime);
-    //             timeStamp1.text(date2.getHours() + ":" + date2.getMinutes()+ ":" + date2.getSeconds());
-    //             document.getElementById("kick2").style.display="block";}
-    //         if(i==2){txtUser3.text(data.users[i].name);
-    //             UserId3.text(data.users[i].i);
-    //             message3.text(data.users[i].message);
-    //             var date3 = new Date(data.users[i].statusTime);
-    //             timeStamp1.text(date3.getHours() + ":" + date3.getMinutes()+ ":" + date3.getSeconds());
-    //             document.getElementById("kick3").style.display="block";}
-    //         if(i==3){txtUser4.text(data.users[i].name);
-    //             UserId4.text(data.users[i].i);
-    //             message4.text(data.users[i].message);
-    //             var date4 = new Date(data.users[i].statusTime);
-    //             timeStamp1.text(date4.getHours() + ":" + date4.getMinutes()+ ":" + date4.getSeconds());
-    //             document.getElementById("kick4").style.display="block";}
-    //     }
-    // });
+        for(let user of data.users)
+        {
+            let tr = $("<tr>");
+            let tdUserid = $("<td>").appendTo(tr);
+            $("<span>").text(user.id).appendTo(tdUserid);
 
-    socket.on('requestDataResult', function(data){
-        
-        var table = document.getElementById("table");
-        var tr = document.createElement("tr");
-        var td = document.createElement("td");
-        var td1 = document.createElement("td");
-        var td2 = document.createElement("td");
-        var td3 = document.createElement("td");
-        var td4 = document.createElement("td");
-        var button = document.createElement("button");
-        button.innerHTML = "Kick";
-        button.addEventListener("click", function(){
-            triggerDelRow(this.parentElement.parentElement.rowIndex);
-            }); 
-        var elmTable = document.getElementById('table');   
-        var tableRows = elmTable.getElementsByTagName('tr')
-        var rowCount = tableRows.length;
-        console.log("lengh " + data.users.length);
-        for(var x=rowCount; x>=1; x--){
-            console.log("del: " + x);
-            elmTable.removeChild(tableRows[x-1]);
-        }
-        
-        
+            let tdUserName = $("<td>").appendTo(tr);
+            $("<span>").text(user.name).appendTo(tdUserName);
 
-        console.log(data.users.length);
-        for(var i = 0; i<data.users.length;i++){
-            console.log("i: "+i);
-            console.log(data.users[i].name);
-            console.log(data.users[i].statusTime);
+            let tdUserMessage = $("<td>").appendTo(tr);
+            $("<span>").text(user.message).appendTo(tdUserMessage);
 
-                var userId = document.createTextNode(data.users[i].id);
-                var userTxt = document.createTextNode(data.users[i].name);
-                var msgTxt = document.createTextNode(data.users[i].message);
-                var date1 = new Date(data.users[i].statusTime);
-                var timeTxt = document.createTextNode(date1.getHours() + ":" + date1.getMinutes()+ ":" + date1.getSeconds());
-                        
-                td4.appendChild(userId);
-                td.appendChild(userTxt);
-                td1.appendChild(msgTxt);
-                td2.appendChild(timeTxt);
-                td3.appendChild(button);
-                tr.appendChild(td4);
-                tr.appendChild(td);
-                tr.appendChild(td1);
-                tr.appendChild(td2);
-                tr.appendChild(td3);
-                table.appendChild(tr);
-                
-        }});
+            let tdUserTime = $("<td>").appendTo(tr);
+            let time = new Date(user.statusTime);
+            $("<span>").text(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds()).appendTo(tdUserTime);
 
-    var addRowButton = $("#addRow");
-    function triggeraddRow(){
-        
-        var table = document.getElementById("table");
-        var tr = document.createElement("tr");
-        tr.add
-        var td = document.createElement("td");
-        var td1 = document.createElement("td");
-        var td2 = document.createElement("td");
-        var td3 = document.createElement("td");
-        var td4 = document.createElement("td");
-        var button = document.createElement("button");
-        button.innerHTML = "Kick";
-        button.addEventListener("click", function(){
-            triggerDelRow(this.parentElement.parentElement.rowIndex);
+            let tdUserKick = $("<td>").appendTo(tr);
+            let kickButton = $("<button>").attr("value", user.id).attr("class", "btn btn-primary").text("Kick " + user.name);
+            kickButton.appendTo(tdUserKick);
+            kickButton.click(function(){
+                triggerKick($( this ).attr("value"));
             });
-        
-        var userId = document.createTextNode(count);
-        var userTxt = document.createTextNode("User1");
-        var msgTxt = document.createTextNode("halllllo");
-        var date1 = new Date();
-        var timeTxt = document.createTextNode(date1.getHours() + ":" + date1.getMinutes()+ ":" + date1.getSeconds());
 
-        td4.appendChild(userId);
-        td.appendChild(userTxt);
-        td1.appendChild(msgTxt);
-        td2.appendChild(timeTxt);
-        td3.appendChild(button);
-        tr.appendChild(td4);
-        tr.appendChild(td);
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        table.appendChild(tr);
-
-        count ++;
-    }
-
-    addRowButton.click(function(){
-        triggeraddRow();
-    })
+            tr.appendTo($("#table"));
+        }
+    });
 
 
-    function triggerDelRow(x){
-        var uId = document.getElementById("table").rows[x].cells[0].innerHTML;
-        triggerKick(uId);
-        document.getElementById("table").deleteRow(x);
-    }
+    const requestUserButton = $("#requestUser");
 
-
-    var requestUserButton = $("#requestUser");
-
-    function triggerRequestData(){   
+    function triggerRequestData(){
         socket.emit('requestData');
     }
 
     requestUserButton.click(function() {
-        //window.alert("sometext");
         triggerRequestData();
     });
 
     function triggerKick(id){
-        window.alert(id);
-        socket.emit('closeConnection', id); 
+        socket.emit('kickUser', id);
     }
-
-    var kickUser = $("#kick4");
-    function triggerKick4(){
-        document.getElementById("User4").textContent = "";
-        document.getElementById("Message4").innerHTML = "";
-        document.getElementById("TimeStamp4").textContent = "";
-        document.getElementById("UserId4").textContent = "";
-        socket.emit('closeConnection', txtUser4.text()) 
-    }
-    kickUser.click(function(){
-        triggerKick4();
-    });
-
-    var kickUser = $("#kick3");
-    function triggerKick3(){
-        document.getElementById("User3").textContent = "";
-        document.getElementById("Message3").innerHTML = "";
-        document.getElementById("TimeStamp3").textContent = "";
-        document.getElementById("UserId3").textContent = "";
-        socket.emit('closeConnection', txtUser3.text())
-    }
-    kickUser.click(function(){
-        triggerKick3();
-    });
-
-    var kickUser = $("#kick2");
-    function triggerKick2(){
-        document.getElementById("User2").textContent = "";
-        document.getElementById("Message2").innerHTML = "";
-        document.getElementById("TimeStamp2").textContent = "";
-        document.getElementById("UserId2").textContent = "";
-        socket.emit('closeConnection', txtUser2.text())
-    }
-    kickUser.click(function(){
-        triggerKick2();
-    });
-
-    var kickUser = $("#kick1");
-    function triggerKick1(){
-        document.getElementById("User1").textContent = "";
-        document.getElementById("Message1").innerHTML = "";
-        document.getElementById("TimeStamp1").textContent = "";
-        document.getElementById("UserId1").textContent = "";
-        socket.emit('closeConnection', txtUser1.text())
-    }
-    kickUser.click(function(){
-        triggerKick1();
-    });
 
 </script>
+
 </body>
 </html>
