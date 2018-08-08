@@ -30,6 +30,7 @@
                         <th scope="col">UserId</th>
                         <th scope="col">User</th>
                         <th scope="col">Message</th>
+                        <th scope="col">Place</th>
                         <th scope="col">Timestamp</th>
                         <th scope="col">Kick</th>
                     </thead>
@@ -72,6 +73,9 @@
 
             let tdUserMessage = $("<td>").appendTo(tr);
             $("<span>").text(user.message).appendTo(tdUserMessage);
+
+            let tdUserSeat = $("<td>").appendTo(tr);
+            $("<span>").text(user.location).appendTo(tdUserSeat);
 
             let tdUserTime = $("<td>").appendTo(tr);
             let time = new Date(user.statusTime);
