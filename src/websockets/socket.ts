@@ -146,7 +146,7 @@ export class WebSocket
 
             });
           });
-        address = 'localhost';
+        // address = 'localhost';
         console.log('IP-Adresse: ' + address);
         this.godSocket.emit('loginExhibit', address);
     }
