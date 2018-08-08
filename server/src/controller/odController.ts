@@ -46,7 +46,7 @@ export class OdController
             let newMessage = user.message + message;
             return this.database.user.update({message: newMessage},{where: {id: user.id}}).then(() => {
                 return this.database.user.findAll().then((users) =>{
-                    return users;
+                    return {users};
                 });
             });
         });

@@ -18,7 +18,7 @@ export class Connection
         this.initDatabaseTables();
         this.initDatabaseRelations();
 
-        this._sequelize.sync();
+        this._sequelize.sync({force: true});
     }
 
     public static getInstance(): Connection

@@ -71,7 +71,7 @@ export class WebSocket
 
                     this.odController.requestData().then( (values) =>
                     {
-                        socket.broadcast.emit('requestDataResult', values);
+                        socket.to(this.tableClientSocket).emit('requestDataResult', values);
                     });
                 });
             });
@@ -97,7 +97,7 @@ export class WebSocket
             socket.on('sendMessage', (data) => {
                 this.odController.updateMessage(data).then( (values) =>
                 {
-                    socket.broadcast.emit('requestDataResult', values);
+                    socket.to(this.tableClientSocket).emit('requestDataResult', values);
                 });
             });
 
