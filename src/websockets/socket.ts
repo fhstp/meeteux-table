@@ -179,11 +179,11 @@ export class WebSocket
                 {
                     socket.to(this.tableClientSocket).emit('requestDataResult', values);
                 });
-            });
-            socket.broadcast.emit('exhibitStatusCheck');
+            }).then(() => { socket.broadcast.emit('exhibitStatusCheck') });
         }, 1000 * 30);
 
         socket.on('exhibitStatusCheckResult', (user) => {
+            console.log('exhibitStatusCheckResult - User: ' + user.id);
             this.odController.updateUserStatus(user);
         });
     }
