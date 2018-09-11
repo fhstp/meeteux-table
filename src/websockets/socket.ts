@@ -26,6 +26,7 @@ export class WebSocket
 
         this.attachODListeners();
         this.attachGodListeners();
+        this.startUserStatusIntervall();
     }
 
     private attachODListeners(): void
@@ -35,10 +36,9 @@ export class WebSocket
             socket.emit('connected', 'Client Table connected to Server!');
 
             socket.on('connectClient', () => {
-                this.startUserStatusIntervall(socket);
-
                 this.tableClientSocket = socket.id;
                 // console.log(this.tableClientSocket);
+                socket.emit('connectClientResult', 'SUCCESS');
             });
 
             socket.on('connectOD', (data) =>
@@ -87,7 +87,7 @@ export class WebSocket
 
                             this.odController.requestData().then( (values) =>
                             {
-                                socket.to(this.tableClientSocket).emit('requestDataResult', values);
+                                this.odSocket.to(this.tableClientSocket).emit('requestDataResult', values);
                             });
                         }
                     });
@@ -101,18 +101,9 @@ export class WebSocket
                 });
             });
 
-            socket.on('transmitDrawingData', (data) => {
-                // let json = JSON.parse(data);
-                // let size = (json.trash.length)/1024;
-                // console.log( JSON.stringify(json.pathNode) + " Data Size: " + size + "KB");
-                socket.to(this.tableClientSocket).emit('receiveDrawingData', data);
-            });
-
-            socket.on('transmitBigData', (data)  => {
-                // let json = JSON.parse(data);
-                // let size = (json.trash.length)/(1024*1024);
-                // console.log("Sending Big Data: " + size + "MB");
-                socket.to(this.tableClientSocket).emit('receiveBigData', data);
+            socket.on('exhibitStatusCheckResult', (user) => {
+                console.log('exhibitStatusCheckResult - User: ' + user.id);
+                this.odController.updateUserStatus(user);
             });
         });
     }
@@ -151,7 +142,7 @@ export class WebSocket
         this.godSocket.emit('loginExhibit', address);
     }
 
-    private startUserStatusIntervall(socket: any): void
+    private startUserStatusIntervall(): void
     {
         setInterval(() => {
             this.odController.findAllUsers().then( (users) =>
@@ -177,14 +168,9 @@ export class WebSocket
 
                 this.odController.requestData().then( (values) =>
                 {
-                    socket.to(this.tableClientSocket).emit('requestDataResult', values);
+                    this.odSocket.to(this.tableClientSocket).emit('requestDataResult', values);
                 });
-            }).then(() => { socket.broadcast.emit('exhibitStatusCheck') });
+            }).then(() => { this.odSocket.emit('exhibitStatusCheck') });
         }, 1000 * 30);
-
-        socket.on('exhibitStatusCheckResult', (user) => {
-            console.log('exhibitStatusCheckResult - User: ' + user.id);
-            this.odController.updateUserStatus(user);
-        });
     }
 }

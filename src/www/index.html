@@ -25,18 +25,20 @@
         <div class="row">
             <div class="col">
                 <h1>Active Exhibit</h1>
-                <table id="table" class="table  table-striped">
-                    <thead>
-                        <th scope="col">UserId</th>
-                        <th scope="col">User</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Place</th>
-                        <th scope="col">Timestamp</th>
-                        <th scope="col">Kick</th>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="table" class="table  table-striped">
+                        <thead>
+                            <th scope="col">UserId</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Place</th>
+                            <th scope="col">Timestamp</th>
+                            <th scope="col">Kick</th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
                 <button id="requestUser" type="button" class="btn btn-primary">requestUser</button>
             </div>
         </div>
@@ -56,9 +58,13 @@
 
     socket.emit('connectClient');
 
+    socket.on('connectClientResult', function(data) {
+        socket.emit('requestData');
+    });
+
     socket.on('requestDataResult', function(data)
     {
-        console.log(data);
+        // console.log(data);
         //removing all content rows
         $("#table tbody tr").remove();
 
