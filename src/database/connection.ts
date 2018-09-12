@@ -42,7 +42,7 @@ export class Connection
     {
         this._user = this._sequelize.define('user', {
             id: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING,
                 primaryKey: true,
             },
             name: {
