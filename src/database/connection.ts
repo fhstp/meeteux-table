@@ -4,7 +4,7 @@ require('dotenv').config();
 export class Connection
 {
     private static _instance: Connection;
-    private _sequelize: any;
+    private readonly _sequelize: any;
     private _user: any;
     private _exhibit: any;
 
@@ -12,31 +12,13 @@ export class Connection
     {
         this._sequelize = new Sequelize('null', 'null', 'null', {
             dialect: 'sqlite',
-            storage: 'database.sqlite'
+            storage: 'database.sqlite',
+            logging: false
         });
         this.initDatabaseTables();
         this.initDatabaseRelations();
 
-        //this._sequelize.sync();
-
-        this._sequelize.sync({force: true}).then(() => {
-            this._user.create({
-                id: 1,
-                name: 'Schlese'
-            });
-            this._user.create({
-                id: 2,
-                name: 'Rowsdower'
-            });
-            this._user.create({
-                id: 3,
-                name: 'Cookie Monster'
-            });
-            this._user.create({
-                id: 4,
-                name: 'Darth Vader'
-            });
-        });
+        this._sequelize.sync({force: true});
     }
 
     public static getInstance(): Connection
@@ -60,12 +42,29 @@ export class Connection
     {
         this._user = this._sequelize.define('user', {
             id: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.STRING,
                 primaryKey: true,
             },
             name: {
                 type: Sequelize.STRING,
                 allowNull: false
+            },
+            location: {
+                type: Sequelize.STRING,
+                allowNull: true
+            },
+            statusTime: {
+                type: Sequelize.DATE,
+                alllowNull: true
+            },
+            message: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: ""
+            },
+            socketId: {
+                type: Sequelize.STRING,
+                allowNull: false,
             }
         });
 
@@ -107,5 +106,9 @@ export class Connection
 
     get user(): any {
         return this._user;
+    }
+
+    get sequelize(): any {
+        return this._sequelize;
     }
 }
