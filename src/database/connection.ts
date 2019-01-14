@@ -64,7 +64,12 @@ export class Connection
             },
             socketId: {
                 type: Sequelize.STRING,
+                allowNull: false
+            },
+            beacon: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
+                unique: true
             }
         });
 
