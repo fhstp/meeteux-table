@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/fhstp/meeteux-table#readme",
   "devDependencies": {
-    "@types/node": "^8.10.9",
+    "@types/node": "^8.10.39",
     "nodemon": "^1.17.3",
     "ts-node": "^3.3.0",
     "typescript": "^2.8.3",
@@ -34,6 +34,6 @@
     "sequelize": "^4.37.6",
     "socket.io": "^2.1.0",
     "socket.io-client": "^2.1.0",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.6"
   }
 }
